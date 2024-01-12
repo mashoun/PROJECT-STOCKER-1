@@ -3,11 +3,11 @@ import { defineStore } from "pinia";
 export const useStore = defineStore('store', {
   state: () => ({
 
-    version: '1.1',
+    version: '1.3',
     isLogedIn: false,
     spinner: false,
-    username: '',
-    password: '',
+    username: 'jabakhanji',
+    password: '2024',
     stocker: {
       "tags": [
         {
@@ -79,15 +79,16 @@ export const useStore = defineStore('store', {
 
     selectedCollection: '',
     selectedItem: '',
+    updatedCollectionId: '',
 
-    invoices:[ ]
+    invoices: []
 
 
   }),
   actions: {
 
     getApi(query = '') {
-      return 'https://script.google.com/macros/s/AKfycbwcpTfO5WTWAJC1Q_NcHuznTqsjO-plzRvAtX4frkry7MgRAd2MfhtAs9mS75RYyCW5lw/exec' + query
+      return 'https://script.google.com/macros/s/AKfycbykOj--0etsxnHzVH9PtAfZhz-L__oS4zPa4VetArVR8dVZwIpy7Nn8DABwVR0kWVuCyg/exec' + query
     },
 
 

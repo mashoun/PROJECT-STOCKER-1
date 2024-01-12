@@ -5,7 +5,7 @@
             <div class="row justify-content-center">
                 <div class="col-12 col-lg-6">
                     <aside class="p-3 rounded shadow-sm d-flex flex-column gap-2 text-center">
-                        <h3 class="font-stocker text-stocker-dark-blue fs-3">JABAKHANJI STORE</h3>
+                        <h3 class="font-stocker text-stocker-dark-blue fs-3">stocker</h3>
                         <p class="text-small pop text-secondary">Lorem ipsum dolor sit amet consectetur adipisicing elit.
                             Dolorem, vero.</p>
                         <input v-model="store.username" type="text" placeholder="username" class="form-control mt-3">
@@ -14,7 +14,7 @@
                             <div class="spinner-grow spinner-grow-sm"></div>
                         </button>
                         <button v-else class="btn btn-sm btn-primary" @click="login">login</button>
-                        <span class="fs-x-small text-secondary">version {{ store.version }}</span>
+                        <span class="fs-x-small text-secondary my-3 font-monospace">developed by libancode - version {{ store.version }}</span>
                     </aside>
                 </div>
             </div>

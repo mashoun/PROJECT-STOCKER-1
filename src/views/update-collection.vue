@@ -10,14 +10,14 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <span class="fs-small ps-1">select a collection*</span>
+                <!-- <span class="fs-small ps-1">select a collection*</span>
                 <div class="d-flex flex-column gap-2">
                     <select v-model="collectionId" class="form-select">
                         <option v-for="node in store.stocker.collections" :key="node.record.id" :value="node.record">{{
                             node.record.name }}</option>
                     </select>
                 </div>
-                <hr>
+                <hr> -->
                 <div class="d-flex flex-column gap-2">
 
                     <img v-if="updateCollection.images" @dblclick="updateCollection.images = ''"
@@ -93,7 +93,7 @@ export default {
                     body: JSON.stringify({
                         username: this.store.username,
                         password: this.store.password,
-                        collectionId: this.collectionId.id,
+                        collectionId: this.store.updatedCollectionId,
                         updateCollection: utilities.removeEmptyStringProperties(this.updateCollection)
                     })
                 }).then(res => res.json()).then(res => {
@@ -102,7 +102,21 @@ export default {
                     if (res.status == true) {
                         // update statically the new collection
 
+                        this.store.stocker.collections.forEach(coll => {
+                            if (coll.record.id == this.store.updatedCollectionId) {
+                                coll.record = utilities.removeEmptyStringProperties(this.updateCollection)
+                                coll.record.id = this.store.updatedCollectionId
+
+                                if (this.updateCollection.hasOwnProperty('images') && this.updateCollection.images != '') {
+                                    coll.record.thumbnail = this.updateCollection.images[0].src64
+                                } else coll.record.thumbnail = ''
+                                // solve this bug for later , if collection already hadve a thumbnail and when updating only the name the thumbnail statically is empty string , should remain the same image
+                            }
+                        })
+
                         alert('Meshe l7al ya 5aye')
+                        this.$router.push('/')
+
                     } else alert(res.data)
                 }).catch(err => {
                     console.log(err);

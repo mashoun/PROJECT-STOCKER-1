@@ -17,7 +17,7 @@
                                 <img v-if="node.record.thumbnail != ''" :src="node.record.thumbnail"
                                     :alt="node.record.name + ' image'" class="object-fit-cover rounded ">
                                 <div v-else class="rounded w-100 border d-flex justify-content-center align-items-center">
-                                    <span class="material-symbols-outlined text-secondary fs-1">image</span>
+                                    <span class="material-symbols-outlined text-primary fs-1">package_2</span>
 
                                 </div>
                             </div>
@@ -27,18 +27,19 @@
                                 <strong @click="showCollectionItems(node)" class="w-100 text-stocker-dark-blue fs-5"
                                     role="button">{{ node.record.name }}</strong>
                                 <i class="bi bi-three-dots text-stocker-dark-blue fs-5" role="button"
-                                    title="update collection" data-bs-toggle="dropdown"></i>
+                                    title="more options" data-bs-toggle="dropdown"></i>
 
                                 <ul class="dropdown-menu">
-                                    <router-link to="/update-collection">
+                                    <!-- <router-link to="/update-collection">
                                         <li class="dropdown-item">update collection</li>
-                                    </router-link>
+                                    </router-link> -->
+                                    <li class="dropdown-item" role="button" @click="updateCollection(node.record.id)">update collection</li>
                                     <li class="dropdown-item" role="button" @click="removeCollection(node.record.id)">delete
                                         this collection</li>
                                 </ul>
                             </div>
                             <p @click="showCollectionItems(node)" class="w-100 fs-smaller text-secondary">{{
-                                node.record.description }}</p>
+                                node.record.id }}</p>
                         </div>
                     </div>
                 </aside>
@@ -82,10 +83,14 @@ export default {
                 }).then(res => res.json()).then(res => {
                     console.log(res);
                     this.spinner = false
-                    this.store.stocker.collections = this.store.stocker.collections.filter(e => {
-                        return e.record.id != collectionId
-                    })
-                    alert('Meshe l7al')
+                    if (res.status == true) {
+
+                        this.store.stocker.collections = this.store.stocker.collections.filter(e => {
+                            return e.record.id != collectionId
+                        })
+                        alert('Meshe l7al')
+                        
+                    } else alert(res.data)
 
                 }).catch(err => {
                     console.log(err);
@@ -93,6 +98,10 @@ export default {
                     this.spinner = false
                 })
             }
+        },
+        updateCollection(collectionId){
+            this.store.updatedCollectionId = collectionId
+            this.$router.push('/update-collection')
         }
     }
 }

@@ -118,6 +118,20 @@ export default {
                 }).then(res => res.json()).then(res => {
                     console.log(res);
                     this.spinner = false
+                    if (res.status == true) {
+                        // add statically the new item
+                        this.createNewItem.id = res.data.itemId
+                        this.store.stocker.collections.forEach(coll => {
+                            if (coll.record.id == this.collectionId.id) {
+                                coll.items.push(this.createNewItem)
+                            }
+                        })
+                        alert('Meshe l7al')
+                    } else alert(res.data)
+                }).catch(err => {
+                    console.log(err);
+                    alert('weak network')
+                    this.spinner = false
                 })
             }
         }

@@ -35,11 +35,11 @@
                     </div>
 
                 </div>
-                <!-- <button @click="addItem" class="btn btn-sm btn-primary my-3">update item</button> -->
-                
-                <button :disabled="spinner" @click="addItem" class="btn btn-primary btn-sm my-3">
+                <!-- <button @click="updateItem" class="btn btn-sm btn-primary my-3">update item</button> -->
+
+                <button :disabled="spinner" @click="saveUpdatedItem" class="btn btn-primary btn-sm my-3">
                     <span v-if="spinner" class="spinner-grow spinner-grow-sm"></span>
-                    <span v-else>add item</span>
+                    <span v-else>update item</span>
                 </button>
                 <router-link to="/"><button class="btn btn-sm btn-outline-secondary ms-1">back</button></router-link>
             </div>
@@ -100,7 +100,7 @@ export default {
                 this.updateItem.image = files64
             }
         },
-        addItem() {
+        saveUpdatedItem() {
             if (confirm('M2akad ??')) {
                 this.spinner = true
                 fetch(this.store.getApi('?updateItem=1'), {
@@ -117,6 +117,28 @@ export default {
                     })
                 }).then(res => res.json()).then(res => {
                     console.log(res);
+                    this.spinner = false
+                    if(res.status == true){
+                        // update statically
+                        this.store.stocker.collections.forEach(coll => {
+                            if (coll.record.id == this.store.selectedCollection.record.id) {
+
+                                coll.items.forEach(item => {
+                                    if(item.id == this.store.selectedItem.id ){
+                                        var object = utilities.removeEmptyStringProperties(this.updateItem)
+                                        for (const key in object) {
+                                            item[key] = object[key]
+                                        }
+                                    }
+                                })
+
+                            }
+                        })
+                        alert('Meshe l7al')
+                    } else alert(res.data)
+                }).catch(err => {
+                    console.log(err);
+                    alert('weak network')
                     this.spinner = false
                 })
             }
