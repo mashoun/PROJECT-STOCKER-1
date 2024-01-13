@@ -24,7 +24,7 @@
                     <!-- <textarea v-model="createNewCollection.description" class="form-control" placeholder="collection description" cols="30" rows="7"></textarea> -->
 
                 </div>
-                <button class="btn btn-sm btn-primary my-3" @click="addCollection">add collection</button>
+                <button :disabled="!isValidInput" class="btn btn-sm btn-primary my-3" @click="addCollection">add collection</button>
                 <router-link to="/"><button class="btn btn-sm btn-outline-secondary ms-1">back</button></router-link>
             </div>
 
@@ -52,6 +52,11 @@ export default {
             }
         }
     },
+    computed: {
+        isValidInput() {
+            return this.createNewCollection.name != ''
+        }
+    },
     methods: {
 
         async uploadImage() {
@@ -73,7 +78,7 @@ export default {
         },
 
         addCollection() {
-            if (confirm('M2akad ??')) {
+            if (confirm('M2akad ??') && this.isValidInput) {
                 this.spinner = true
                 fetch(this.store.getApi('?createNewCollection=1'), {
                     method: "POST",

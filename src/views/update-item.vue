@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="d-flex flex-column gap-2">
-                    <h5>Updating {{ store.selectedCollection.record.name }} > {{ store.selectedItem.name }}</h5>
+                    <h5>Updating in {{ store.selectedCollection.record.name }} > {{ store.selectedItem.name }}</h5>
                     <div @click="uploadImage" role="button"
                         class="form-control rounded w-100 border d-flex justify-content-between align-items-center">
                         <span>upload item image</span>

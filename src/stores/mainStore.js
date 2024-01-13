@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 export const useStore = defineStore('store', {
   state: () => ({
 
-    version: '1.3',
+    version: '1.5',
     isLogedIn: false,
     spinner: false,
     username: 'jabakhanji',

@@ -38,8 +38,10 @@
                                         this collection</li>
                                 </ul>
                             </div>
-                            <p @click="showCollectionItems(node)" class="w-100 fs-smaller text-secondary">{{
-                                node.record.id }}</p>
+                            <!-- <p @click="showCollectionItems(node)" class="w-100 fs-smaller text-secondary">{{
+                                node.record.id }}</p> -->
+                            <p @click="showCollectionItems(node)" class="w-100 fs-smaller text-secondary pt-2">{{
+                                node.items.length }}</p>
                         </div>
                     </div>
                 </aside>

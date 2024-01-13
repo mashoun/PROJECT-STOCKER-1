@@ -18,31 +18,48 @@
                                 node.record.name }}</option>
                         </select>
                     </div>
-                    <div @click="uploadImage" role="button"
-                        class="form-control rounded w-100 border d-flex justify-content-between align-items-center">
-                        <span>upload item image</span>
-                        <span class="material-symbols-outlined text-secondary fs-4">image</span>
-                    </div>
                     <input v-model="createNewItem.name" class="form-control" type="text" placeholder="item name">
                     <input v-model="createNewItem.quantity" class="form-control" type="number" placeholder="item quantity">
                     <input v-model="createNewItem.unitPrice" class="form-control" type="number"
                         placeholder="item unit price">
-                    <hr>
-                    <div class="d-flex flex-column gap-2" v-for="tag in getSelectTags" :key="tag.id">
-                        <strong class="fs-small pop ps-2 text-secondary">{{ tag.name }}</strong>
-                        <select v-model="createNewItem[tag.name]" class="form-select">
-                            <option v-for="node in tag.value.split(',')" :value="node">{{ node }}</option>
-                            <option value="">NONE</option>
-                        </select>
+
+                    <div class="d-flex justify-content-center my-3">
+                        <span class="material-symbols-outlined fs-3 text-primary" @click="advancedTags = !advancedTags" role="button">unfold_more</span>
                     </div>
-                    <hr>
-                    <div class="d-flex flex-column gap-2" v-for="tag in getInputTags" :key="tag.id">
-                        <input v-model="createNewItem[tag.name]" class="form-control" type="text"
-                            :placeholder="'enter ' + tag.name">
-                    </div>
+                    <aside v-show="advancedTags">
+
+                        <div class="d-flex flex-column gap-2">
+                                    
+                            <!-- <div @click="uploadImage" role="button"
+                                class="form-control rounded w-100 border d-flex justify-content-between align-items-center">
+                                <span>upload item image</span>
+                                <span class="material-symbols-outlined text-secondary fs-4">image</span>
+                            </div> -->
+
+                            <img v-if="createNewItem.image" @dblclick="createNewItem.image = ''"
+                                :src="createNewItem.image[0].src64" :alt="createNewItem.image[0].src64" width="60"
+                                height="60" class="rounded object-fit-contain">
+                            <div v-else @click="uploadImage"
+                                class="form-control rounded w-100 border d-flex justify-content-start align-items-center">
+                                <span class="text-secondary">upload image ( dbl click on img to reset )</span>
+                            </div>
+                            <div class="d-flex flex-column gap-2" v-for="tag in getSelectTags" :key="tag.id">
+                                <strong class="fs-small pop ps-2 text-secondary">{{ tag.name }}</strong>
+                                <select v-model="createNewItem[tag.name]" class="form-select">
+                                    <option v-for="node in tag.value.split(',')" :value="node">{{ node }}</option>
+                                    <option value="">NONE</option>
+                                </select>
+                            </div>
+                            <hr>
+                            <div class="d-flex flex-column gap-2" v-for="tag in getInputTags" :key="tag.id">
+                                <input v-model="createNewItem[tag.name]" class="form-control" type="text"
+                                    :placeholder="'enter ' + tag.name">
+                            </div>
+                        </div>
+                    </aside>
 
                 </div>
-                <button @click="addItem" class="btn btn-sm btn-primary my-3">add item</button>
+                <button @click="addItem" :disabled="!isValidInput" class="btn btn-sm btn-primary my-3">add item</button>
                 <router-link to="/"><button class="btn btn-sm btn-outline-secondary ms-1">back</button></router-link>
             </div>
         </div>
@@ -68,7 +85,8 @@ export default {
                 unitPrice: '',
                 quantity: '',
                 image: '',
-            }
+            },
+            advancedTags: false
         }
     },
     computed: {
@@ -82,6 +100,9 @@ export default {
                 return e.name != 'image' && e.value != '' && e.value.includes(',')
             })
         },
+        isValidInput() {
+            return this.createNewItem.name.trim() != '' && this.createNewItem.unitPrice != '' && this.createNewItem.quantity != '' && this.collectionId != ''
+        }
     },
     methods: {
         async uploadImage() {
@@ -102,7 +123,7 @@ export default {
             }
         },
         addItem() {
-            if (confirm('M2akad ??')) {
+            if (confirm('M2akad ??') && this.isValidInput) {
                 this.spinner = true
                 fetch(this.store.getApi('?createNewItem=1'), {
                     method: "POST",
