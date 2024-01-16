@@ -33,7 +33,7 @@
 </template>
   
 <script>
-import { useStore } from "../stores/mainStore";
+import { useStore } from "@/stores/mainStore";
 import utilities from "@/utilities.js";
 export default {
 

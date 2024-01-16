@@ -1,13 +1,38 @@
 <template>
-    <section v-if="spinner" style="width: 100vw; height: 100vh !important;"
-        class="position-fixed z-3 top-0 start-0 bg-glass d-flex justify-content-center align-items-center">
+    <spinner v-if="spinner"></spinner>
 
-        <div class="p-3 d-flex flex-column justify-content-center align-items-center gap-3">
-            <h3 class="font-stocker text-stocker-dark-blue fs-3">updating item</h3>
-            <span class="spinner-grow spinner-grow-sm"></span>
+    <section class="container">
+        <div class="row g-4">
+            <div class="col-12">
+                <h5 class="pop text-secondary">Update Item Details</h5>
+            </div>
+            <div class="col-12">
+                <aside class="table-responsive">
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr v-for="(value, key) in selectedItem">
+                                <td class="text-uppercase fw-bold" :class="[{ 'fw-bold text-primary': key == 'unitPrice' }, { 'fw-bold text-danger': key == 'quantity' && value <= 0 },{ 'fw-bold text-primary': key == 'name' }]"
+                                    v-if="value != '' && (key != 'id' && key != 'index' && key != 'image' && key != 'timestamp')">
+                                    {{ key }}</td>
+                                <td class="font-arabic" :class="[{ 'fw-bold text-primary': key == 'unitPrice' }, { 'fw-bold text-danger': key == 'quantity' && value <= 0 },{ 'fw-bold text-primary': key == 'name' }]"
+                                    v-if="value != '' && (key != 'id' && key != 'index' && key != 'image') && key != 'timestamp'">
+                                    {{ value }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </aside>
+            </div>
+            <!-- <div class="col-12 col-md-4 col-lg-2">
+                <router-link :to="{name:'updateItem',params:{collectionId:$route.params.collectionId,itemId:$route.params.itemId}}"><button class="w-100 btn btn-sm btn-outline-primary">Update Item</button></router-link>
+            </div>
+            <div class="col-12 col-md-4 col-lg-2">
+                <button class="w-100 btn btn-sm btn-outline-danger">Remove Item</button>
+            </div> -->
         </div>
     </section>
-    <div class="container">
+
+
+    <!-- <div class="container">
         <div class="row">
             <div class="col-12">
                 <div class="d-flex flex-column gap-2">
@@ -35,7 +60,6 @@
                     </div>
 
                 </div>
-                <!-- <button @click="updateItem" class="btn btn-sm btn-primary my-3">update item</button> -->
 
                 <button :disabled="spinner" @click="saveUpdatedItem" class="btn btn-primary btn-sm my-3">
                     <span v-if="spinner" class="spinner-grow spinner-grow-sm"></span>
@@ -44,12 +68,13 @@
                 <router-link to="/"><button class="btn btn-sm btn-outline-secondary ms-1">back</button></router-link>
             </div>
         </div>
-    </div>
+    </div> -->
 </template>
   
 <script>
-import { useStore } from "../stores/mainStore";
+import { useStore } from "@/stores/mainStore";
 import utilities from "@/utilities.js";
+import spinner from "@/components/spinner.vue";
 export default {
 
     setup() {
@@ -70,6 +95,7 @@ export default {
             }
         }
     },
+    components: { spinner },
     computed: {
         getInputTags() {
             return this.store.stocker.tags.filter(e => {
@@ -81,8 +107,19 @@ export default {
                 return e.name != 'image' && e.value != '' && e.value.includes(',')
             })
         },
+        selectedItem() {
+            return this.getCollectionById(this.$route.params.collectionId).items.filter(item => {
+                return item.id == this.$route.params.itemId
+            })[0]
+        }
     },
     methods: {
+
+        getCollectionById(collectionId) {
+            return this.store.stocker.collections.filter(coll => {
+                return coll.record.id == collectionId
+            })[0]
+        },
         async uploadImage() {
             var files = await utilities.openFiles()
             if (files) {
@@ -118,13 +155,13 @@ export default {
                 }).then(res => res.json()).then(res => {
                     console.log(res);
                     this.spinner = false
-                    if(res.status == true){
+                    if (res.status == true) {
                         // update statically
                         this.store.stocker.collections.forEach(coll => {
                             if (coll.record.id == this.store.selectedCollection.record.id) {
 
                                 coll.items.forEach(item => {
-                                    if(item.id == this.store.selectedItem.id ){
+                                    if (item.id == this.store.selectedItem.id) {
                                         var object = utilities.removeEmptyStringProperties(this.updateItem)
                                         for (const key in object) {
                                             item[key] = object[key]

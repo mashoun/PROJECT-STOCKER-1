@@ -88,7 +88,7 @@ export const useStore = defineStore('store', {
   actions: {
 
     getApi(query = '') {
-      return 'https://script.google.com/macros/s/AKfycbykOj--0etsxnHzVH9PtAfZhz-L__oS4zPa4VetArVR8dVZwIpy7Nn8DABwVR0kWVuCyg/exec' + query
+      return 'https://script.google.com/macros/s/AKfycbxaCzXTxHLJ7rQK4o75-DLJawI91CFHlBmvaXgTlfZV7jvNxdQG83aWBldopVBwYBPBsw/exec' + query
     },
 
 

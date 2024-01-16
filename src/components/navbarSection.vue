@@ -4,14 +4,9 @@
         <section class="d-flex align-items-center gap-2">
             <router-link to="/">
                 <h5 class="mb-0">
-                    <span v-show="$route.name != 'items'"  class="font-stocker text-stocker-dark-blue fs-3">STOCKER</span>
+                    <span class="font-stocker text-stocker-dark-blue fs-3">STOCKER</span>
                 </h5>
             </router-link>
-            <div class="d-flex font-arabic">
-                <router-link to="/"><span v-show="$route.name == 'items'"  class="material-symbols-outlined">grid_view</span></router-link>
-                <span v-show="$route.name == 'items'" class="material-symbols-outlined">chevron_right</span>
-                <span v-if="$route.name == 'items'">{{ store.selectedCollection.record.name }}</span>
-            </div>
         </section>
         <section class="d-flex align-items-center gap-3">
             <!-- <i class="bi bi-person-circle fs-4 text-secondary" role="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu"></i> -->
@@ -27,8 +22,8 @@
                 <!-- <router-link to="/invoice"><button class="w-100 btn btn-sm btn-outline-secondary" data-bs-dismiss="offcanvas">my invoice</button></router-link>
                 <hr> -->
                 <router-link to="/"><button class="w-100 btn btn-sm btn-outline-secondary" data-bs-dismiss="offcanvas">my collections</button></router-link>
-                <router-link to="/new-collection"><button class="w-100 btn btn-sm btn-outline-secondary" data-bs-dismiss="offcanvas">add new collection</button></router-link>
-                <router-link to="/new-item"><button class="w-100 btn btn-sm btn-primary" data-bs-dismiss="offcanvas">add new item</button></router-link>
+                <router-link to="/newCollection"><button class="w-100 btn btn-sm btn-outline-secondary" data-bs-dismiss="offcanvas">add new collection</button></router-link>
+                <!-- <router-link to="/newItem"><button class="w-100 btn btn-sm btn-primary" data-bs-dismiss="offcanvas">add new item</button></router-link> -->
             </div>
         </aside>
     </header>

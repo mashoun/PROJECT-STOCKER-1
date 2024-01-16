@@ -6,32 +6,52 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: () => import('../views/home-page.vue')
+      component: () => import('../views/collections/collectionList.vue')
+    },
+    // {
+    //   path: '/items',
+    //   name: 'items',
+    //   component: () => import('../views/items-list.vue')
+    // },
+    // {
+    //   path: '/items/:id',
+    //   name: 'itemDetails',
+    //   component: () => import('../views/item-details.vue')
+    // },
+    {
+      path: '/collections/:collectionId',
+      name: 'collectionItems',
+      component: () => import('../views/collections/items/collectionItems.vue')
     },
     {
-      path: '/items',
-      name: 'items',
-      component: () => import('../views/items-list.vue')
+      path: '/collections/:collectionId/items/:itemId',
+      name: 'itemDetails',
+      component: () => import('../views/collections/items/itemDetails.vue')
     },
     {
-      path: '/new-collection',
+      path: '/newCollection',
       name: 'newCollection',
-      component: () => import('../views/new-collection.vue')
+      component: () => import('../views/newCollection.vue')
     },
+    // {
+    //   path: '/newItem',
+    //   name: 'newItem',
+    //   component: () => import('../views/newItem.vue')
+    // },
     {
-      path: '/new-item',
+      path: '/collections/:collectionId/newItem',
       name: 'newItem',
-      component: () => import('../views/new-item.vue')
+      component: () => import('../views/newItem.vue')
     },
     {
-      path: '/update-collection',
+      path: '/updateCollection',
       name: 'updateCollection',
-      component: () => import('../views/update-collection.vue')
+      component: () => import('../views/updateCollection.vue')
     },
     {
-      path: '/update-item',
+      path: '/updateItem/:collectionId/:itemId',
       name: 'updateItem',
-      component: () => import('../views/update-item.vue')
+      component: () => import('../views/updateItem.vue')
     },
     {
       path: '/invoice',
