@@ -22,7 +22,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="node in store.invoice" :key="node">
+                            <tr v-for="node in store.invoices" :key="node">
                                 <th scope="row" :disabled="spinner" @click="removeItemById(node.itemId)"><i
                                         class="bi bi-trash"></i></th>
                                 <td class="fs-small">
@@ -96,7 +96,7 @@ export default {
 
         removeItemById(itemId) {
             if (confirm('m2akad ?')) {
-                this.store.invoice = this.store.invoice.filter(e => {
+                this.store.invoices = this.store.invoices.filter(e => {
                     return e.itemId != itemId
                 })
             }
@@ -114,12 +114,12 @@ export default {
                         username: this.store.username,
                         password: this.store.password,
                         client: utilities.removeEmptyStringProperties(this.client),
-                        items: this.store.invoice
+                        items: this.store.invoices
                     })
                 }).then(res => res.json()).then(res => {
                     console.log(res);
                     this.spinner = false
-                    if (res == true) alert('Meshe l7al')
+                    // must update the store with the new quantity
                 }).catch(err => {
                     alert(err)
                 })

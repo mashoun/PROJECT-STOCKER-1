@@ -4,7 +4,7 @@
     <section class="container">
         <div class="row g-4">
             <div class="col-12">
-                <h5 class="font-stocker text-secondary">Adding new item</h5>
+                <pagination :collection="selectedCollection.record"></pagination>
             </div>
             <div class="col-12">
                 <aside class="d-flex flex-column gap-2">
@@ -37,8 +37,11 @@
                 </aside>
             </div>
 
-            <div class="col-12 col-lg-2"><button @click="addItem" :disabled="!isValidInput"
-                    class="btn btn-sm btn-primary my-3">add item</button></div>
+            <div class="col-12 col-lg-4">
+                <button @click="addItem" :disabled="!isValidInput" class="btn btn-sm btn-primary my-3">add item</button>
+                <router-link to="/"><button class="btn btn-sm btn-outline-secondary ms-1">back</button></router-link>
+            </div>
+            
         </div>
     </section>
     
@@ -48,13 +51,14 @@
 import { useStore } from "@/stores/mainStore";
 import utilities from "@/utilities.js";
 import spinner from "@/components/spinner.vue";
+import pagination from "@/components/pagination.vue";
 export default {
 
     setup() {
         const store = useStore();
         return { store };
     },
-    components: { spinner },
+    components: { spinner, pagination },
     data() {
         return {
             utilities,
@@ -94,7 +98,14 @@ export default {
             return this.store.stocker.tags.filter(e => {
                 return e.name != 'image'
             })
-        }
+        },
+        
+        selectedCollection() {
+            return this.store.stocker.collections.filter(coll => {
+                return coll.record.id == this.$route.params.collectionId
+            })[0]
+        },
+        
 
     },
     methods: {
@@ -150,14 +161,6 @@ export default {
             }
         },
         insertNewTag() {
-            // insert in createNewItem
-            // if (!this.createNewItem.hasOwnProperty(this.nextTag.name)) {
-            //     this.createNewItem[this.nextTag.name] = this.nextTag.value
-            // }
-
-
-            // this.createNewItem[this.nextTag.name] = this.nextTag.newValue
-            // if tag not found then add else update value
             var tagExist = false
 
             this.tagStack.forEach(tag => {

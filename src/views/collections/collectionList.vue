@@ -4,7 +4,8 @@
     <section class="container">
         <div class="row g-3 justify-content-start">
             <!-- <div class="col-12">
-                <h5 class="font-stocker text-secondary">All Collections</h5>
+                <pagination></pagination>
+                <h5 class="font-stocker ">My Collections</h5>
             </div> -->
             <div role="button" class="col-12 col-md-10 col-lg-6" v-for="node in store.stocker.collections"
                 :key="node.record.id">
@@ -19,11 +20,18 @@
             </div>
         </div>
     </section>
+    
+    <aside class="position-fixed bottom-0 end-0 z-1">
+        <router-link :to="{ name: 'newCollection' }">
+            <div class="m-3"><span class="material-symbols-outlined fs-xx-large text-primary">add_box</span></div>
+        </router-link>
+    </aside>
 </template>
 
 <script>
 import { useStore } from '@/stores/mainStore';
 import spinner from '@/components/spinner.vue';
+import pagination from '@/components/pagination.vue';
 export default {
 
     setup() {
@@ -35,7 +43,7 @@ export default {
             spinner: false
         }
     },
-    components: { spinner },
+    components: { spinner, pagination },
     methods: {
         // showCollectionItems(collection) {
         //     this.store.selectedCollection = collection

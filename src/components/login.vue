@@ -6,9 +6,9 @@
                 <div class="col-12 col-lg-6">
                     <aside class="p-3 rounded shadow-sm d-flex flex-column gap-2 text-center">
                         <h3 class="font-stocker text-stocker-dark-blue fs-3">stocker</h3>
-                        <p class="text-small pop text-secondary">O</p>
+                        <p class="text-small pop text-secondary"></p>
                         <input v-model="store.username" type="text" placeholder="username" class="form-control mt-3">
-                        <input v-model="store.password" type="password" placeholder="password" class="form-control">
+                        <input @keydown.enter="login" v-model="store.password" type="password" placeholder="password" class="form-control">
                         <button v-if="spinner" class="btn btn-sm btn-primary">
                             <div class="spinner-grow spinner-grow-sm"></div>
                         </button>

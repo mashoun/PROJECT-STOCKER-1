@@ -8,16 +8,6 @@ const router = createRouter({
       name: 'home',
       component: () => import('../views/collections/collectionList.vue')
     },
-    // {
-    //   path: '/items',
-    //   name: 'items',
-    //   component: () => import('../views/items-list.vue')
-    // },
-    // {
-    //   path: '/items/:id',
-    //   name: 'itemDetails',
-    //   component: () => import('../views/item-details.vue')
-    // },
     {
       path: '/collections/:collectionId',
       name: 'collectionItems',
@@ -28,31 +18,32 @@ const router = createRouter({
       name: 'itemDetails',
       component: () => import('../views/collections/items/itemDetails.vue')
     },
+
+
     {
       path: '/newCollection',
       name: 'newCollection',
       component: () => import('../views/newCollection.vue')
     },
-    // {
-    //   path: '/newItem',
-    //   name: 'newItem',
-    //   component: () => import('../views/newItem.vue')
-    // },
     {
       path: '/collections/:collectionId/newItem',
       name: 'newItem',
       component: () => import('../views/newItem.vue')
     },
+
+
     {
-      path: '/updateCollection',
+      path: '/updateCollection/:collectionId',
       name: 'updateCollection',
       component: () => import('../views/updateCollection.vue')
     },
     {
-      path: '/updateItem/:collectionId/:itemId',
+      path: '/collections/:collectionId/updateItem/:itemId',
       name: 'updateItem',
       component: () => import('../views/updateItem.vue')
     },
+
+    
     {
       path: '/invoice',
       name: 'invoice',

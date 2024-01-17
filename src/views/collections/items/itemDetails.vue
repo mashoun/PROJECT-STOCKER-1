@@ -3,7 +3,7 @@
     <section class="container">
         <div class="row g-4">
             <div class="col-12">
-                <h5 class="pop text-secondary">Item Details</h5>
+                <pagination :collection="getCollectionById($route.params.collectionId).record" :item="selectedItem"></pagination>
             </div>
             <div class="col-12">
                 <aside class="table-responsive">
@@ -11,10 +11,10 @@
                         <tbody>
                             <tr v-for="(value, key) in selectedItem">
                                 <td class="text-uppercase fw-bold" :class="[{ 'fw-bold text-primary': key == 'unitPrice' }, { 'fw-bold text-danger': key == 'quantity' && value <= 0 },{ 'fw-bold text-primary': key == 'name' }]"
-                                    v-if="value != '' && (key != 'id' && key != 'index' && key != 'image' && key != 'timestamp')">
+                                    v-if="value != '' && value != 'NULL' && (key != 'id' && key != 'index' && key != 'image' && key != 'timestamp')">
                                     {{ key }}</td>
                                 <td class="font-arabic" :class="[{ 'fw-bold text-primary': key == 'unitPrice' }, { 'fw-bold text-danger': key == 'quantity' && value <= 0 },{ 'fw-bold text-primary': key == 'name' }]"
-                                    v-if="value != '' && (key != 'id' && key != 'index' && key != 'image') && key != 'timestamp'">
+                                    v-if="value != '' && value != 'NULL' && (key != 'id' && key != 'index' && key != 'image') && key != 'timestamp'">
                                     {{ value }}</td>
                             </tr>
                         </tbody>
@@ -28,6 +28,9 @@
                 <router-link :to="{name:'updateItem',params:{collectionId:$route.params.collectionId,itemId:$route.params.itemId}}"><button class="w-100 btn btn-sm btn-success">Update Item</button></router-link>
             </div>
             <div class="col-12 col-md-4 col-lg-2">
+                <button class="w-100 btn btn-sm btn-outline-secondary" @click="addToInvoice">Add to invoice</button>
+            </div>
+            <div class="col-12 col-md-4 col-lg-2">
                 <button class="w-100 btn btn-sm btn-outline-danger" @click="removeItem">Remove Item</button>
             </div>
         </div>
@@ -36,6 +39,7 @@
 <script>
 import { useStore } from "@/stores/mainStore";
 import spinner from "@/components/spinner.vue";
+import pagination from "@/components/pagination.vue";
 export default {
     setup() {
         const store = useStore();
@@ -53,7 +57,7 @@ export default {
             })[0]
         }
     },
-    components: { spinner },
+    components: { spinner, pagination },
     methods: {
 
         getCollectionById(collectionId) {
@@ -117,12 +121,13 @@ export default {
             }
         },
         addToInvoice() {
-            if (parseInt(this.data.quantity) > 0) {
+            console.log(parseInt(this.selectedItem.quantity));
+            if (parseInt(this.selectedItem.quantity) > 0) {
 
-                this.store.invoice.push({
+                this.store.invoices.push({
 
                     collectionId: this.$route.params.collectionId,
-                    itemId: this.data.id,
+                    itemId: this.$route.params.itemId,
                     quantity: '1'
                 })
 

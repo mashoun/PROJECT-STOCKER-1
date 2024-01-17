@@ -1,33 +1,46 @@
 <template>
-    <spinner v-if="spinner"></spinner>
+    <spinner v-if="spinner">Updating Item</spinner>
 
     <section class="container">
         <div class="row g-4">
             <div class="col-12">
-                <h5 class="pop text-secondary">Update Item Details</h5>
+                <pagination :collection="getCollectionById($route.params.collectionId).record" :item="selectedItem"></pagination>
             </div>
             <div class="col-12">
-                <aside class="table-responsive">
-                    <table class="table table-hover">
-                        <tbody>
-                            <tr v-for="(value, key) in selectedItem">
-                                <td class="text-uppercase fw-bold" :class="[{ 'fw-bold text-primary': key == 'unitPrice' }, { 'fw-bold text-danger': key == 'quantity' && value <= 0 },{ 'fw-bold text-primary': key == 'name' }]"
-                                    v-if="value != '' && (key != 'id' && key != 'index' && key != 'image' && key != 'timestamp')">
-                                    {{ key }}</td>
-                                <td class="font-arabic" :class="[{ 'fw-bold text-primary': key == 'unitPrice' }, { 'fw-bold text-danger': key == 'quantity' && value <= 0 },{ 'fw-bold text-primary': key == 'name' }]"
-                                    v-if="value != '' && (key != 'id' && key != 'index' && key != 'image') && key != 'timestamp'">
-                                    {{ value }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <aside class="d-flex flex-column gap-2">
+
+                    <div v-for="node in tagStack" :key="node">
+                        <div v-if="updateItem[node.name] != ''" @dblclick="updateItem[node.name] = ''"
+                            class="p-2 d-flex align-items-center gap-2 border border-2 rounded bg-light text-secondary">
+                            <span class="material-symbols-outlined text-secondary">label</span>
+                            <span class="fw-bold text-uppercase">{{ node.name }}</span>
+                            <span>{{ updateItem[node.name] }}</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <select v-model="nextTag" class="form-select">
+                            <option v-for="node in allTags" :key="node" :value="node">{{ node.name }}</option>
+                            <option :value="{name:'name',value:''}">name</option>
+                            <option :value="{name:'quantity',value:''}">quantity</option>
+                            <option :value="{name:'unitPrice',value:''}">unitPrice</option>
+                        </select>
+                        <select v-show="nextTag.value != ''" v-model="updateItem[nextTag.name]" @change="insertNewTag"
+                            class="form-select">
+                            <option v-for="node in nextTag.value.split(',')" :value="node">{{ node }}</option>
+                            <option value="">NONE</option>
+                            <option value="NULL">REMOVE</option>
+                        </select>
+                        <input v-show="nextTag.value == ''" v-model="updateItem[nextTag.name]" @keydown="insertNewTag"
+                            type="text" class="form-control" placeholder="add new tag">
+                    </div>
                 </aside>
             </div>
-            <!-- <div class="col-12 col-md-4 col-lg-2">
-                <router-link :to="{name:'updateItem',params:{collectionId:$route.params.collectionId,itemId:$route.params.itemId}}"><button class="w-100 btn btn-sm btn-outline-primary">Update Item</button></router-link>
+            
+            <div class="col-12 col-lg-4">
+                <button @click="saveUpdatedItem" :disabled="tagStack.length == 0" class="btn btn-sm btn-success my-3">Save & Update</button>
+                <router-link to="/"><button class="btn btn-sm btn-outline-secondary ms-1">back</button></router-link>
             </div>
-            <div class="col-12 col-md-4 col-lg-2">
-                <button class="w-100 btn btn-sm btn-outline-danger">Remove Item</button>
-            </div> -->
         </div>
     </section>
 
@@ -75,6 +88,7 @@
 import { useStore } from "@/stores/mainStore";
 import utilities from "@/utilities.js";
 import spinner from "@/components/spinner.vue";
+import pagination from "@/components/pagination.vue";
 export default {
 
     setup() {
@@ -85,17 +99,24 @@ export default {
         return {
             utilities,
             spinner: false,
-            collectionId: '',
-            itemId: '',
+            collectionId: this.$route.params.collectionId,
+            itemId: this.$route.params.itemId,
             updateItem: {
                 name: '',
                 unitPrice: '',
                 quantity: '',
                 image: '',
-            }
+            },
+            nextTag: {
+                name: '',
+                id: '',
+                value: '',
+                newValue: ''
+            },
+            tagStack: []
         }
     },
-    components: { spinner },
+    components: { spinner, pagination },
     computed: {
         getInputTags() {
             return this.store.stocker.tags.filter(e => {
@@ -111,10 +132,36 @@ export default {
             return this.getCollectionById(this.$route.params.collectionId).items.filter(item => {
                 return item.id == this.$route.params.itemId
             })[0]
+        },
+        
+        selectedCollection() {
+            return this.store.stocker.collections.filter(coll => {
+                return coll.record.id == this.$route.params.collectionId
+            })[0]
+        },
+        
+        allTags() {
+            return this.store.stocker.tags.filter(e => {
+                return e.name != 'image'
+            })
         }
     },
     methods: {
 
+        insertNewTag() {
+            var tagExist = false
+
+            this.tagStack.forEach(tag => {
+                if (tag.name == this.nextTag.name) {
+                    // update
+                    tag = this.nextTag
+                    tagExist = true
+                }
+            })
+
+            if (!tagExist) this.tagStack.push(this.nextTag)
+
+        },
         getCollectionById(collectionId) {
             return this.store.stocker.collections.filter(coll => {
                 return coll.record.id == collectionId
@@ -148,8 +195,8 @@ export default {
                     body: JSON.stringify({
                         username: this.store.username,
                         password: this.store.password,
-                        collectionId: this.store.selectedCollection.record.id,
-                        itemId: this.store.selectedItem.id,
+                        collectionId: this.$route.params.collectionId,
+                        itemId: this.$route.params.itemId,
                         updateItem: utilities.removeEmptyStringProperties(this.updateItem)
                     })
                 }).then(res => res.json()).then(res => {
@@ -158,10 +205,10 @@ export default {
                     if (res.status == true) {
                         // update statically
                         this.store.stocker.collections.forEach(coll => {
-                            if (coll.record.id == this.store.selectedCollection.record.id) {
+                            if (coll.record.id == this.$route.params.collectionId) {
 
                                 coll.items.forEach(item => {
-                                    if (item.id == this.store.selectedItem.id) {
+                                    if (item.id == this.$route.params.itemId) {
                                         var object = utilities.removeEmptyStringProperties(this.updateItem)
                                         for (const key in object) {
                                             item[key] = object[key]

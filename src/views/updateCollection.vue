@@ -10,14 +10,6 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <!-- <span class="fs-small ps-1">select a collection*</span>
-                <div class="d-flex flex-column gap-2">
-                    <select v-model="collectionId" class="form-select">
-                        <option v-for="node in store.stocker.collections" :key="node.record.id" :value="node.record">{{
-                            node.record.name }}</option>
-                    </select>
-                </div>
-                <hr> -->
                 <div class="d-flex flex-column gap-2">
 
                     <img v-if="updateCollection.images" @dblclick="updateCollection.images = ''"
@@ -36,7 +28,7 @@
                 <button v-if="spinner" class="btn btn-sm btn-primary my-3" style="width: 124.53px;">
                     <div class="spinner-grow spinner-grow-sm"></div>
                 </button>
-                <button v-else class="btn btn-sm btn-primary my-3" @click="addCollection">update collection</button>
+                <button :disabled="!isValidInput" v-else class="btn btn-sm btn-primary my-3" @click="addCollection">update collection</button>
                 <router-link to="/"><button class="btn btn-sm btn-outline-secondary ms-1">back</button></router-link>
             </div>
 
@@ -57,9 +49,15 @@ export default {
         return {
             utilities,
             spinner: false,
-            collectionId: '',
             updateCollection: {
+                name:''
             }
+        }
+    },
+    computed:{
+
+        isValidInput() {
+            return this.updateCollection.name != ''
         }
     },
     methods: {
@@ -93,7 +91,7 @@ export default {
                     body: JSON.stringify({
                         username: this.store.username,
                         password: this.store.password,
-                        collectionId: this.store.updatedCollectionId,
+                        collectionId: this.$route.params.collectionId,
                         updateCollection: utilities.removeEmptyStringProperties(this.updateCollection)
                     })
                 }).then(res => res.json()).then(res => {
@@ -103,9 +101,9 @@ export default {
                         // update statically the new collection
 
                         this.store.stocker.collections.forEach(coll => {
-                            if (coll.record.id == this.store.updatedCollectionId) {
+                            if (coll.record.id == this.$route.params.collectionId) {
                                 coll.record = utilities.removeEmptyStringProperties(this.updateCollection)
-                                coll.record.id = this.store.updatedCollectionId
+                                coll.record.id = this.$route.params.collectionId
 
                                 if (this.updateCollection.hasOwnProperty('images') && this.updateCollection.images != '') {
                                     coll.record.thumbnail = this.updateCollection.images[0].src64
