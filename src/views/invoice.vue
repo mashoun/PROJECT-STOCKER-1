@@ -9,7 +9,7 @@
                     <input class="form-control" type="number" placeholder="Client number">
                 </aside>
             </div>
-            <div class="col-12 py-4">
+            <div class="col-12 py-3">
                 <aside class="table-responsive">
                     <table class="table table-hover">
                         <thead>
@@ -50,6 +50,9 @@
                 </aside>
             </div>
             <div class="col-12">
+                <p class="text-primary font-monospace fs-3 text-end">SUBTOTAL: {{ calculateTotal }}</p>
+            </div>
+            <div class="col-12">
                 <button :disabled="spinner" @click="saveInvoice" class="btn btn-primary btn-sm">
                     <span v-if="spinner" class="spinner-grow spinner-grow-sm"></span>
                     <span v-else>Save invoice</span>
@@ -77,6 +80,19 @@ export default {
                 number: '',
                 email: ''
             },
+
+        }
+    },
+    computed: {
+        calculateTotal() {
+
+            var total = 0
+            var currency = ''
+            this.store.invoices.forEach(node => {
+                total += parseFloat(node.quantity) * parseFloat(this.getItemById(node.collectionId, node.itemId)[0].unitPrice)
+                currency = this.getItemById(node.collectionId, node.itemId)[0].currency
+            })
+            return total +' '+ currency
 
         }
     },
@@ -120,6 +136,10 @@ export default {
                     console.log(res);
                     this.spinner = false
                     // must update the store with the new quantity
+                    if (res.status == true) {
+                        this.store.stocker = res.data
+                        alert('Meshe L7al')
+                    } else alert(res.data)
                 }).catch(err => {
                     alert(err)
                 })

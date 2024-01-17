@@ -3,12 +3,9 @@
 
     <section class="container">
         <div class="row g-3 justify-content-start">
-            <!-- <div class="col-12">
-                <pagination></pagination>
-                <h5 class="font-stocker ">My Collections</h5>
-            </div> -->
+            
             <div role="button" class="col-12 col-md-10 col-lg-6" v-for="node in store.stocker.collections"
-                :key="node.record.id">
+                :key="node">
                 <router-link :to="{ name: 'collectionItems', params: { collectionId: node.record.id } }">
                     <aside class="p-3 d-flex justify-content-between align-items-center shadow-sm bg-light gap-2">
                         <span class="material-symbols-outlined text-stocker-secondary fs-1">folder</span>

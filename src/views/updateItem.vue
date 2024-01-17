@@ -1,10 +1,11 @@
 <template>
     <spinner v-if="spinner">Updating Item</spinner>
 
-    <section class="container">
+    <section v-if="selectedCollection.record.id != '' && selectedItem.id != ''" class="container">
         <div class="row g-4">
             <div class="col-12">
-                <pagination :collection="getCollectionById($route.params.collectionId).record" :item="selectedItem"></pagination>
+                <pagination :collection="getCollectionById($route.params.collectionId).record" :item="selectedItem">
+                </pagination>
             </div>
             <div class="col-12">
                 <aside class="d-flex flex-column gap-2">
@@ -21,9 +22,9 @@
                     <div class="input-group">
                         <select v-model="nextTag" class="form-select">
                             <option v-for="node in allTags" :key="node" :value="node">{{ node.name }}</option>
-                            <option :value="{name:'name',value:''}">name</option>
-                            <option :value="{name:'quantity',value:''}">quantity</option>
-                            <option :value="{name:'unitPrice',value:''}">unitPrice</option>
+                            <option :value="{ name: 'name', value: '' }">name</option>
+                            <option :value="{ name: 'quantity', value: '' }">quantity</option>
+                            <option :value="{ name: 'unitPrice', value: '' }">unitPrice</option>
                         </select>
                         <select v-show="nextTag.value != ''" v-model="updateItem[nextTag.name]" @change="insertNewTag"
                             class="form-select">
@@ -36,52 +37,17 @@
                     </div>
                 </aside>
             </div>
-            
+
             <div class="col-12 col-lg-4">
-                <button @click="saveUpdatedItem" :disabled="tagStack.length == 0" class="btn btn-sm btn-success my-3">Save & Update</button>
+                <button @click="saveUpdatedItem" :disabled="tagStack.length == 0" class="btn btn-sm btn-success my-3">Save &
+                    Update</button>
                 <router-link to="/"><button class="btn btn-sm btn-outline-secondary ms-1">back</button></router-link>
             </div>
         </div>
     </section>
-
-
-    <!-- <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="d-flex flex-column gap-2">
-                    <h5>Updating in {{ store.selectedCollection.record.name }} > {{ store.selectedItem.name }}</h5>
-                    <div @click="uploadImage" role="button"
-                        class="form-control rounded w-100 border d-flex justify-content-between align-items-center">
-                        <span>upload item image</span>
-                        <span class="material-symbols-outlined text-secondary fs-4">image</span>
-                    </div>
-                    <input v-model="updateItem.name" class="form-control" type="text" placeholder="item name">
-                    <input v-model="updateItem.quantity" class="form-control" type="number" placeholder="item quantity">
-                    <input v-model="updateItem.unitPrice" class="form-control" type="number" placeholder="item unit price">
-                    <hr>
-                    <div class="d-flex flex-column gap-2" v-for="tag in getSelectTags" :key="tag.id">
-                        <strong class="fs-small pop ps-2 text-secondary">{{ tag.name }}</strong>
-                        <select v-model="updateItem[tag.name]" class="form-select">
-                            <option v-for="node in tag.value.split(',')" :value="node">{{ node }}</option>
-                            <option value="">NONE</option>
-                        </select>
-                    </div>
-                    <hr>
-                    <div class="d-flex flex-column gap-2" v-for="tag in getInputTags" :key="tag.id">
-                        <input v-model="updateItem[tag.name]" class="form-control" type="text"
-                            :placeholder="'enter ' + tag.name">
-                    </div>
-
-                </div>
-
-                <button :disabled="spinner" @click="saveUpdatedItem" class="btn btn-primary btn-sm my-3">
-                    <span v-if="spinner" class="spinner-grow spinner-grow-sm"></span>
-                    <span v-else>update item</span>
-                </button>
-                <router-link to="/"><button class="btn btn-sm btn-outline-secondary ms-1">back</button></router-link>
-            </div>
-        </div>
-    </div> -->
+    <section v-else class="p-5">
+        <h1 class="text-secondary text-center pop">404 Item Not Found</h1>
+    </section>
 </template>
   
 <script>
@@ -129,17 +95,28 @@ export default {
             })
         },
         selectedItem() {
-            return this.getCollectionById(this.$route.params.collectionId).items.filter(item => {
+            var icoll = this.getCollectionById(this.$route.params.collectionId).items.filter(item => {
                 return item.id == this.$route.params.itemId
-            })[0]
+            })
+            if (icoll.length == 0) return {
+                id: '',
+            }
+            return icoll[0]
         },
-        
+
         selectedCollection() {
-            return this.store.stocker.collections.filter(coll => {
+            var scoll = this.store.stocker.collections.filter(coll => {
                 return coll.record.id == this.$route.params.collectionId
-            })[0]
+            })
+
+            if (scoll.length == 0) return {
+                record: { id: '', name: '' },
+                items: []
+            }
+
+            return scoll[0]
         },
-        
+
         allTags() {
             return this.store.stocker.tags.filter(e => {
                 return e.name != 'image'

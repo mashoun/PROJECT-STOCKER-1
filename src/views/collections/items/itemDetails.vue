@@ -1,6 +1,6 @@
 <template>
     <spinner v-if="spinner">Removing Item</spinner>
-    <section class="container">
+    <section v-if="selectedCollection.record.id != '' && selectedItem.id != ''"  class="container">
         <div class="row g-4">
             <div class="col-12">
                 <pagination :collection="getCollectionById($route.params.collectionId).record" :item="selectedItem"></pagination>
@@ -35,6 +35,9 @@
             </div>
         </div>
     </section>
+    <section v-else class="p-5">
+        <h1 class="text-secondary text-center pop">404 Item Not Found</h1>
+    </section>
 </template>
 <script>
 import { useStore } from "@/stores/mainStore";
@@ -51,11 +54,28 @@ export default {
         }
     },
     computed: {
+        
+        selectedCollection() {
+            var scoll = this.store.stocker.collections.filter(coll => {
+                return coll.record.id == this.$route.params.collectionId
+            })
+            if (scoll.length == 0) return {
+                record: { id: '', name: '' },
+                items: []
+            }
+
+            return scoll[0]
+        },
+        
         selectedItem() {
-            return this.getCollectionById(this.$route.params.collectionId).items.filter(item => {
+            var icoll = this.getCollectionById(this.$route.params.collectionId).items.filter(item => {
                 return item.id == this.$route.params.itemId
-            })[0]
-        }
+            })
+            if (icoll.length == 0) return {
+                id: '',
+            }
+            return icoll[0]
+        },
     },
     components: { spinner, pagination },
     methods: {

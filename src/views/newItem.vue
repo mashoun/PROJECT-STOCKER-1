@@ -1,7 +1,7 @@
 <template>
     <spinner v-if="spinner">Adding new item</spinner>
    
-    <section class="container">
+    <section v-if="selectedCollection.record.id != ''" class="container">
         <div class="row g-4">
             <div class="col-12">
                 <pagination :collection="selectedCollection.record"></pagination>
@@ -44,6 +44,7 @@
             
         </div>
     </section>
+    <section v-else class="p-5"><h1 class="text-secondary text-center pop">404 Collection Not Found</h1></section>
     
 </template>
   
@@ -101,9 +102,16 @@ export default {
         },
         
         selectedCollection() {
-            return this.store.stocker.collections.filter(coll => {
+            var scoll = this.store.stocker.collections.filter(coll => {
                 return coll.record.id == this.$route.params.collectionId
-            })[0]
+            })
+            
+            if (scoll.length == 0) return {
+                record: { id: '', name: '' },
+                items: []
+            }
+
+            return scoll[0]
         },
         
 
@@ -148,7 +156,7 @@ export default {
                         this.createNewItem.id = res.data.itemId
                         this.store.stocker.collections.forEach(coll => {
                             if (coll.record.id == this.collectionId) {
-                                coll.items.push(this.createNewItem)
+                                coll.items.push({...this.createNewItem})
                             }
                         })
                         alert('Meshe l7al')

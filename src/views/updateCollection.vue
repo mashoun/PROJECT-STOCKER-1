@@ -7,7 +7,7 @@
             <span class="spinner-grow spinner-grow-sm"></span>
         </div>
     </section>
-    <div class="container">
+    <section v-if="selectedCollection.record.id != ''" class="container">
         <div class="row">
             <div class="col-12">
                 <div class="d-flex flex-column gap-2">
@@ -33,7 +33,8 @@
             </div>
 
         </div>
-    </div>
+    </section>
+    <section v-else class="p-5"><h1 class="text-secondary text-center pop">404 Collection Not Found</h1></section>
 </template>
   
 <script>
@@ -58,7 +59,20 @@ export default {
 
         isValidInput() {
             return this.updateCollection.name != ''
-        }
+        },
+        
+        selectedCollection() {
+            var scoll = this.store.stocker.collections.filter(coll => {
+                return coll.record.id == this.$route.params.collectionId
+            })
+            
+            if (scoll.length == 0) return {
+                record: { id: '', name: '' },
+                items: []
+            }
+
+            return scoll[0]
+        },
     },
     methods: {
 

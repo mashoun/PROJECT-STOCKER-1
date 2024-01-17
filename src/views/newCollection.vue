@@ -11,7 +11,6 @@
         <div class="row">
             <div class="col-12">
                 <div class="d-flex flex-column gap-2">
-
                     <img v-if="createNewCollection.images" @dblclick="createNewCollection.images = ''"
                         :src="createNewCollection.images[0].src64" :alt="createNewCollection.images[0].src64" width="60"
                         height="60" class="rounded object-fit-contain">
@@ -24,7 +23,8 @@
                     <!-- <textarea v-model="createNewCollection.description" class="form-control" placeholder="collection description" cols="30" rows="7"></textarea> -->
 
                 </div>
-                <button :disabled="!isValidInput" class="btn btn-sm btn-primary my-3" @click="addCollection">add collection</button>
+                <button :disabled="!isValidInput" class="btn btn-sm btn-primary my-3" @click="addCollection">add
+                    collection</button>
                 <router-link to="/"><button class="btn btn-sm btn-outline-secondary ms-1">back</button></router-link>
             </div>
 
@@ -46,6 +46,7 @@ export default {
             utilities,
             spinner: false,
             createNewCollection: {
+
                 name: '',
                 // images: '',
                 // description: ''
@@ -67,7 +68,6 @@ export default {
                 for (let i = 0; i < files.length; i++) {
                     files64.push({
                         alt: `stocker-${utilities.getCurrentDate()}`,
-                        // src64: await utilities.file64(files[i])
                         src64: await utilities.optimizeImageQuality(await utilities.file64(files[i]), 0.7)
                     })
                 }
@@ -100,7 +100,7 @@ export default {
                             this.createNewCollection.thumbnail = this.createNewCollection.images[0].src64
                         } else this.createNewCollection.thumbnail = ''
                         this.store.stocker.collections.push({
-                            record: this.createNewCollection,
+                            record: { ...this.createNewCollection },
                             items: []
                         })
                         alert('Meshe l7al ya 5aye')

@@ -1,11 +1,10 @@
 <template>
     <spinner v-if="spinner">Removing Collection</spinner>
-    <section class="container">
+    <section v-if="selectedCollection.record.id != ''" class="container">
         <div class="row g-3">
             <div class="col-12">
                 <pagination :collection="selectedCollection.record"></pagination>
             </div>
-            <!--  v-if="!selectedCollection.items.length == 0"  -->
             <div class="col-12">
                 <div class="input-group mb-3">
                     <input v-model="searchInput" type="text" class="form-control"
@@ -46,7 +45,8 @@
             </div>
         </div>
     </section>
-    <aside class="position-fixed bottom-0 end-0 z-1">
+    <section v-else class="p-5"><h1 class="text-secondary text-center pop">404 Collection Not Found</h1></section>
+    <aside v-if="selectedCollection.record.id != ''" class="position-fixed bottom-0 end-0 z-1">
         <router-link :to="{ name: 'newItem', params: { collectionId: $route.params.collectionId } }">
             <div class="m-3"><span class="material-symbols-outlined fs-xx-large text-primary">add_circle</span></div>
         </router-link>
@@ -73,16 +73,22 @@ export default {
     components: { item, pagination, spinner },
     computed: {
         selectedCollection() {
-            return this.store.stocker.collections.filter(coll => {
+            var scoll = this.store.stocker.collections.filter(coll => {
                 return coll.record.id == this.$route.params.collectionId
-            })[0]
+            })
+            if (scoll.length == 0) return {
+                record: { id: '', name: '' },
+                items: []
+            }
+
+            return scoll[0]
         },
 
         filteredItems() {
             if (this.searchInput == '') return this.selectedCollection.items
 
             return this.selectedCollection.items.filter(item => {
-                return item.name.includes(this.searchInput) || item.modelType.includes(this.searchInput) || item.modelNumber.includes(this.searchInput) || item.modelBrand.includes(this.searchInput)
+                return item.name.toUpperCase().includes(this.searchInput.toUpperCase()) || item.modelType.includes(this.searchInput) || item.modelNumber.includes(this.searchInput) || item.modelBrand.includes(this.searchInput)
             });
         }
 
@@ -93,6 +99,7 @@ export default {
 
             if (confirm('m2akad ?')) {
                 this.spinner = true
+
                 fetch(this.store.getApi('?removeCollection=1'), {
                     method: "POST",
                     headers: {
@@ -104,16 +111,20 @@ export default {
                         collectionId: this.$route.params.collectionId
                     })
                 }).then(res => res.json()).then(res => {
+
                     console.log(res);
                     this.spinner = false
                     if (res.status == true) {
-
+                        console.log('removing statically from collections');
                         this.store.stocker.collections = this.store.stocker.collections.filter(e => {
                             return e.record.id != this.$route.params.collectionId
                         })
-                        
-                        this.$router.replace('/')
+
+                        console.log(this.store.stocker.collections);
+
                         alert('Meshe l7al')
+
+                        this.$router.replace({name:'home'})
 
                     } else alert(res.data)
 
