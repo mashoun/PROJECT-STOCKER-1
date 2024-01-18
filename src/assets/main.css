@@ -48,6 +48,10 @@ a {
 
 /* TEXT COLOR */
 
+.no-wrap{
+    white-space: nowrap;
+}
+
 .text-stocker-primary {
     color: var(--stocker-primary);
 }

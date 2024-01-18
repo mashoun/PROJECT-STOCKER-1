@@ -1,5 +1,5 @@
 <template>
-    <aside
+    <aside style="overflow-x: auto !important; white-space: nowrap;"
         class="p-2 bg-grad text-stocker-dark-blue border rounded d-flex align-items-center gap-1 font-arabic text-uppercase">
         <router-link to="/">HOME</router-link>
         <span class="material-symbols-outlined">double_arrow</span>
@@ -7,7 +7,7 @@
             {{ collection.name }}
         </router-link>
         <span v-if="item && item.id != ''" class="material-symbols-outlined">double_arrow</span>
-        <span v-if="item && item.id != ''" class="text-fade">{{ item.name }}</span>
+        <span v-if="item && item.id != ''" class="">{{ item.name }}</span>
     </aside>
 </template>
 <script>

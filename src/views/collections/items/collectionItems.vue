@@ -10,7 +10,7 @@
                     <input v-model="searchInput" type="text" class="form-control"
                         placeholder="Search by name, model type/brand/number">
                     <span class="input-group-text"><span class="material-symbols-outlined">search</span></span>
-                    <span class="input-group-text" type="button" data-bs-toggle="dropdown"><span
+                    <span class="input-group-text rounded-end" type="button" data-bs-toggle="dropdown"><span
                             class="material-symbols-outlined text-dark fw-bold">more_horiz</span></span>
                     <ul class="dropdown-menu fs-small">
                         <li>
@@ -39,8 +39,8 @@
                     <aside
                         class="w-100 p-3 bg-light shadow-sm rounded d-flex justify-content-between align-items-center gap-2">
                         <span class="material-symbols-outlined text-stocker-secondary fs-1">package_2</span>
-                        <p class="w-100 font-arabic text-uppercase text-stocker-dark-blue fw-bold">{{ node.name }}</p>
-                        <span class="fs-smaller text-secondary m-0">{{ node.quantity }}</span>
+                        <p class="w-100 font-arabic text-uppercase text-stocker-dark-blue fw-bold"  :class="{'text-danger': parseFloat(node.quantity) <= 1}">{{ node.name }}</p>
+                        <span class="fs-smaller m-0 text-secondary" :class="{'text-danger': parseFloat(node.quantity) <= 1}">{{ node.quantity }}</span>
                         <span class="material-symbols-outlined">navigate_next</span>
                     </aside>
                 </router-link>

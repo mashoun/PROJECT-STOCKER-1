@@ -53,7 +53,7 @@
                 <p class="text-primary font-monospace fs-4 text-end">SUBTOTAL: {{ calculateTotal }}</p>
             </div>
             <div class="col-12">
-                <button :disabled="spinner" @click="saveInvoice" class="btn btn-primary">
+                <button :disabled="spinner || calculateTotal == 0" @click="saveInvoice" class="btn btn-primary">
                     <span v-if="spinner" class="spinner-grow spinner-grow-sm"></span>
                     <span v-else>Cash In & Save</span>
                 </button>

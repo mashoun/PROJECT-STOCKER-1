@@ -3,11 +3,11 @@ import { defineStore } from "pinia";
 export const useStore = defineStore('store', {
   state: () => ({
 
-    version: '2.1',
+    version: '2.1.1',
     isLogedIn: false,
     spinner: false,
-    username: 'jabakhanji',
-    password: '2024',
+    username: '',
+    password: '',
     stocker: {
       "tags": [
         {

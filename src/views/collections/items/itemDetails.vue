@@ -5,8 +5,7 @@
             <div class="col-12">
                 <pagination :collection="getCollectionById($route.params.collectionId).record" :item="selectedItem"></pagination>
             </div>
-            <div class="col-6 col-md-2"  v-if="selectedItem.image != ''">
-                
+            <div class="col-12 col-md-2"  v-if="selectedItem.image != ''">
                 <div class="ratio ratio-1x1">
                     <img :src="typeof(selectedItem.image) == 'string' ? selectedItem.image : selectedItem.image[0].src64  " :alt="selectedItem.name" class="object-fit-cover rounded shadow-sm skeleton">
                 </div>
@@ -16,11 +15,11 @@
                     <table class="table table-hover">
                         <tbody>
                             <tr v-for="(value, key) in selectedItem">
-                                <td class="text-uppercase fw-bold" :class="[{ 'fw-bold text-primary': key == 'unitPrice' }, { 'fw-bold text-danger': key == 'quantity' && value <= 0 },{ 'fw-bold text-primary': key == 'name' }]"
+                                <td class="text-uppercase fw-bold" :class="[{ 'fw-bold text-primary': key == 'unitPrice' },{ 'fw-bold text-primary': key == 'quantity' }, { 'fw-bold text-danger': key == 'quantity' && value <= 1 },{ 'fw-bold text-primary': key == 'name' }]"
                                     v-if="value != '' && value != 'NULL' && (key != 'id' && key != 'index' && key != 'image' && key != 'timestamp')">
                                     {{ key }}
                                 </td>
-                                <td class="font-arabic" :class="[{ 'fw-bold text-primary': key == 'unitPrice' },{ 'fw-bold': key == 'quantity' }, { 'fw-bold text-danger': key == 'quantity' && value <= 0 },{ 'fw-bold text-primary': key == 'name' }]"
+                                <td class="font-arabic" :class="[{ 'fw-bold text-primary': key == 'unitPrice' },{ 'fw-bold text-primary': key == 'quantity' },{ 'fw-bold': key == 'quantity' }, { 'fw-bold text-danger': key == 'quantity' && value <= 1 },{ 'fw-bold text-primary': key == 'name' }]"
                                     v-if="value != '' && value != 'NULL' && (key != 'id' && key != 'index' && key != 'image') && key != 'timestamp'">
                                     <span v-if="key == 'unitCost'">{{ hideCost ? '***' : value }}</span>
                                     <span v-else >{{ value }}</span>
