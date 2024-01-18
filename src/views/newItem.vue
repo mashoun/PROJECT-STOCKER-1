@@ -8,6 +8,14 @@
             </div>
             <div class="col-12">
                 <aside class="d-flex flex-column gap-2">
+                    <img v-if="createNewItem.image" @dblclick="createNewItem.image = ''"
+                        :src="createNewItem.image[0].src64" :alt="createNewItem.image[0].src64" width="60"
+                        height="60" class="rounded object-fit-contain">
+                    <div v-else @click="uploadImage"
+                        class="form-control rounded w-100 border d-flex justify-content-start align-items-center gap-2">
+                        <span class="material-symbols-outlined text-secondary">photo_camera</span>
+                        <span class="text-secondary">upload image ( dbl click on img to reset )</span>
+                    </div>
                     <input v-model="createNewItem.name" class="form-control" type="text" placeholder="item name*">
                     <input v-model="createNewItem.quantity" class="form-control" type="number" placeholder="item quantity*">
                     <input v-model="createNewItem.unitPrice" class="form-control" type="number"

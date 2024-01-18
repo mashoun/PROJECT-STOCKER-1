@@ -50,12 +50,12 @@
                 </aside>
             </div>
             <div class="col-12">
-                <p class="text-primary font-monospace fs-3 text-end">SUBTOTAL: {{ calculateTotal }}</p>
+                <p class="text-primary font-monospace fs-4 text-end">SUBTOTAL: {{ calculateTotal }}</p>
             </div>
             <div class="col-12">
-                <button :disabled="spinner" @click="saveInvoice" class="btn btn-primary btn-sm">
+                <button :disabled="spinner" @click="saveInvoice" class="btn btn-primary">
                     <span v-if="spinner" class="spinner-grow spinner-grow-sm"></span>
-                    <span v-else>Save invoice</span>
+                    <span v-else>Cash In & Save</span>
                 </button>
             </div>
         </div>

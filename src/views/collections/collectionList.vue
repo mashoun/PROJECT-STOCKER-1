@@ -3,7 +3,8 @@
 
     <section class="container">
         <div class="row g-3 justify-content-start">
-            
+            <div v-if="store.stocker.collections.length != 0" class="col-12"><p class="text-secondary fs-small pop ls-1 fw-bold">All {{store.stocker.collections.length}} collections</p></div>
+            <div v-else class="col-12"><p class="text-secondary fs-small pop ls-1 text-center py-3">Start by creating new collection</p></div>
             <div role="button" class="col-12 col-md-10 col-lg-6" v-for="node in store.stocker.collections"
                 :key="node">
                 <router-link :to="{ name: 'collectionItems', params: { collectionId: node.record.id } }">

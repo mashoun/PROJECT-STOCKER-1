@@ -5,6 +5,12 @@
             <div class="col-12">
                 <pagination :collection="getCollectionById($route.params.collectionId).record" :item="selectedItem"></pagination>
             </div>
+            <div class="col-6 col-md-2"  v-if="selectedItem.image != ''">
+                
+                <div class="ratio ratio-1x1">
+                    <img :src="typeof(selectedItem.image) == 'string' ? selectedItem.image : selectedItem.image[0].src64  " :alt="selectedItem.name" class="object-fit-cover rounded shadow-sm skeleton">
+                </div>
+            </div>
             <div class="col-12">
                 <aside class="table-responsive">
                     <table class="table table-hover">
@@ -12,10 +18,13 @@
                             <tr v-for="(value, key) in selectedItem">
                                 <td class="text-uppercase fw-bold" :class="[{ 'fw-bold text-primary': key == 'unitPrice' }, { 'fw-bold text-danger': key == 'quantity' && value <= 0 },{ 'fw-bold text-primary': key == 'name' }]"
                                     v-if="value != '' && value != 'NULL' && (key != 'id' && key != 'index' && key != 'image' && key != 'timestamp')">
-                                    {{ key }}</td>
-                                <td class="font-arabic" :class="[{ 'fw-bold text-primary': key == 'unitPrice' }, { 'fw-bold text-danger': key == 'quantity' && value <= 0 },{ 'fw-bold text-primary': key == 'name' }]"
+                                    {{ key }}
+                                </td>
+                                <td class="font-arabic" :class="[{ 'fw-bold text-primary': key == 'unitPrice' },{ 'fw-bold': key == 'quantity' }, { 'fw-bold text-danger': key == 'quantity' && value <= 0 },{ 'fw-bold text-primary': key == 'name' }]"
                                     v-if="value != '' && value != 'NULL' && (key != 'id' && key != 'index' && key != 'image') && key != 'timestamp'">
-                                    {{ value }}</td>
+                                    <span v-if="key == 'unitCost'">{{ hideCost ? '***' : value }}</span>
+                                    <span v-else >{{ value }}</span>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -23,15 +32,17 @@
             </div>
         </div>
         <div class="row g-2 my-2">
-            
-            <div class="col-12 col-md-4 col-lg-2">
-                <router-link :to="{name:'updateItem',params:{collectionId:$route.params.collectionId,itemId:$route.params.itemId}}"><button class="w-100 btn btn-sm btn-success">Update Item</button></router-link>
-            </div>
-            <div class="col-12 col-md-4 col-lg-2">
-                <button class="w-100 btn btn-sm btn-outline-secondary" @click="addToInvoice">Add to invoice</button>
-            </div>
-            <div class="col-12 col-md-4 col-lg-2">
-                <button class="w-100 btn btn-sm btn-outline-danger" @click="removeItem">Remove Item</button>
+            <div class="col-12 col-md-3">
+                <aside class="d-flex justify-content-between align-items-center rounded gap-2 bg-primary text-light pop py-2 px-3 dropup">
+                    <span class="pop ls-1 fs-6 w-100" @dblclick="addToInvoice">+ Zeda 3al fetora</span>
+                    <span role="button" class="material-symbols-outlined fw-bolder fs-4" data-bs-toggle="dropdown" >more_horiz</span>
+                    <ul class="dropdown-menu fs-small">
+                        <li><router-link class="dropdown-item text-success" :to="{name:'updateItem',params:{collectionId:$route.params.collectionId,itemId:$route.params.itemId}}">Update this item</router-link></li>
+                        <li><span @click="hideCost = !hideCost" class="dropdown-item" role="button">Toggle Cost</span></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><span class="dropdown-item text-danger opacity-75" @click="removeItem" role="button">Remove this item</span></li>
+                    </ul>
+                </aside>
             </div>
         </div>
     </section>
@@ -50,7 +61,8 @@ export default {
     },
     data() {
         return {
-            spinner: false
+            spinner: false,
+            hideCost:true
         }
     },
     computed: {

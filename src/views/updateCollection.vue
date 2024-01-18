@@ -12,13 +12,13 @@
             <div class="col-12">
                 <div class="d-flex flex-column gap-2">
 
-                    <img v-if="updateCollection.images" @dblclick="updateCollection.images = ''"
+                    <!-- <img v-if="updateCollection.images" @dblclick="updateCollection.images = ''"
                         :src="updateCollection.images[0].src64" :alt="updateCollection.images[0].src64" width="60"
                         height="60" class="rounded object-fit-contain">
                     <div v-else @click="uploadImage"
                         class="form-control rounded w-100 border d-flex justify-content-start align-items-center">
                         <span class="text-secondary">upload image ( dbl click on img to reset )</span>
-                    </div>
+                    </div> -->
 
                     <input v-model="updateCollection.name" class="form-control" type="text" placeholder="collection name">
                     <!-- <textarea v-model="updateCollection.description" class="form-control"

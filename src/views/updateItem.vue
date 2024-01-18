@@ -10,6 +10,14 @@
             <div class="col-12">
                 <aside class="d-flex flex-column gap-2">
 
+                    <img v-if="updateItem.image" @dblclick="updateItem.image = ''" :src="updateItem.image[0].src64"
+                        :alt="updateItem.image[0].src64" width="60" height="60" class="rounded object-fit-contain">
+                    <div v-else @click="uploadImage"
+                        class="form-control rounded w-100 border d-flex justify-content-start align-items-center gap-2">
+                        <span class="material-symbols-outlined text-secondary">photo_camera</span>
+                        <span class="text-secondary">upload image ( dbl click on img to reset )</span>
+                    </div>
+
                     <div v-for="node in tagStack" :key="node">
                         <div v-if="updateItem[node.name] != ''" @dblclick="updateItem[node.name] = ''"
                             class="p-2 d-flex align-items-center gap-2 border border-2 rounded bg-light text-secondary">
@@ -37,9 +45,8 @@
                     </div>
                 </aside>
             </div>
-
             <div class="col-12 col-lg-4">
-                <button @click="saveUpdatedItem" :disabled="tagStack.length == 0" class="btn btn-sm btn-success my-3">Save &
+                <button @click="saveUpdatedItem" :disabled="!isValid()" class="btn btn-sm btn-success my-3">Save &
                     Update</button>
                 <router-link to="/"><button class="btn btn-sm btn-outline-secondary ms-1">back</button></router-link>
             </div>
@@ -124,7 +131,10 @@ export default {
         }
     },
     methods: {
-
+        isValid() {
+            if (this.updateItem.image != '' || this.tagStack.length != 0) return true
+            return false
+        },
         insertNewTag() {
             var tagExist = false
 

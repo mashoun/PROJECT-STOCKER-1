@@ -11,13 +11,13 @@
         <div class="row">
             <div class="col-12">
                 <div class="d-flex flex-column gap-2">
-                    <img v-if="createNewCollection.images" @dblclick="createNewCollection.images = ''"
+                    <!-- <img v-if="createNewCollection.images" @dblclick="createNewCollection.images = ''"
                         :src="createNewCollection.images[0].src64" :alt="createNewCollection.images[0].src64" width="60"
                         height="60" class="rounded object-fit-contain">
                     <div v-else @click="uploadImage"
                         class="form-control rounded w-100 border d-flex justify-content-start align-items-center">
                         <span class="text-secondary">upload image ( dbl click on img to reset )</span>
-                    </div>
+                    </div> -->
                     <input v-model="createNewCollection.name" class="form-control" type="text"
                         placeholder="collection name">
                     <!-- <textarea v-model="createNewCollection.description" class="form-control" placeholder="collection description" cols="30" rows="7"></textarea> -->

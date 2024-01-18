@@ -30,6 +30,7 @@
                     </ul>
                 </div>
             </div>
+            <!-- <div v-if="selectedCollection.items.length != 0" class="col-12"><p class="text-secondary fs-small pop ls-1 fw-bold">Items:</p></div> -->
             <div v-if="selectedCollection.items.length == 0" class="col-12">
                 <p class="text-secondary text-center fs-small py-5">This collection is empty!</p>
             </div>
@@ -39,6 +40,7 @@
                         class="w-100 p-3 bg-light shadow-sm rounded d-flex justify-content-between align-items-center gap-2">
                         <span class="material-symbols-outlined text-stocker-secondary fs-1">package_2</span>
                         <p class="w-100 font-arabic text-uppercase text-stocker-dark-blue fw-bold">{{ node.name }}</p>
+                        <span class="fs-smaller text-secondary m-0">{{ node.quantity }}</span>
                         <span class="material-symbols-outlined">navigate_next</span>
                     </aside>
                 </router-link>
