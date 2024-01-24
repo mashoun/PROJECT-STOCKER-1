@@ -3,12 +3,12 @@
 
     <section class="container">
         <div class="row g-3 justify-content-start">
-            <div v-if="store.stocker.collections.length != 0" class="col-12"><p class="text-secondary fs-small pop ls-1 fw-bold">All {{store.stocker.collections.length}} collections</p></div>
+            <div v-if="store.stocker.collections.length != 0" class="col-12"><p class="ps-2 border-start border-5 border-warning text-secondary fs-small pop ls-1 fw-bold">All {{store.stocker.collections.length}} / 50 collections</p></div>
             <div v-else class="col-12"><p class="text-secondary fs-small pop ls-1 text-center py-3">Start by creating new collection</p></div>
             <div role="button" class="col-12 col-md-10 col-lg-6" v-for="node in store.stocker.collections"
                 :key="node">
                 <router-link :to="{ name: 'collectionItems', params: { collectionId: node.record.id } }">
-                    <aside class="p-3 d-flex justify-content-between align-items-center shadow-sm bg-light gap-2">
+                    <aside :title="node.record.name" class="p-3 d-flex justify-content-between align-items-center shadow-sm bg-light gap-2">
                         <span class="material-symbols-outlined text-stocker-secondary fs-1">folder</span>
                         <strong class="w-100 text-stocker-dark-blue font-arabic text-uppercase text-fade" role="button">{{ node.record.name }}</strong>
                         <span class="fs-smaller text-secondary m-0">{{ node.items.length }}</span>
@@ -19,7 +19,7 @@
         </div>
     </section>
     
-    <aside class="position-fixed bottom-0 end-0 z-1">
+    <aside class="position-fixed bottom-0 end-0 z-1" title="Create new collection">
         <router-link :to="{ name: 'newCollection' }">
             <div class="m-3"><span class="material-symbols-outlined fs-xx-large text-primary">add_box</span></div>
         </router-link>
@@ -30,6 +30,7 @@
 import { useStore } from '@/stores/mainStore';
 import spinner from '@/components/spinner.vue';
 import pagination from '@/components/pagination.vue';
+import utilities from '@/utilities';
 export default {
 
     setup() {

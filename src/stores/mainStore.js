@@ -6,8 +6,8 @@ export const useStore = defineStore('store', {
     version: '2.1.1',
     isLogedIn: false,
     spinner: false,
-    username: '',
-    password: '',
+    username: 'jabakhanji',
+    password: '2024',
     stocker: {
       "tags": [
         {

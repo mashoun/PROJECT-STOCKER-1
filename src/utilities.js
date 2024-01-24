@@ -1,5 +1,3 @@
-
-
 function hasNullEmptyValue(obj) {
     // Check if obj is an object or array
     if (typeof obj === 'object' && obj !== null) {

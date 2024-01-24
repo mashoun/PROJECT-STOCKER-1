@@ -39,7 +39,7 @@
                     <aside
                         class="w-100 p-3 bg-light shadow-sm rounded d-flex justify-content-between align-items-center gap-2">
                         <span class="material-symbols-outlined text-stocker-secondary fs-1">package_2</span>
-                        <p class="w-100 font-arabic text-uppercase text-stocker-dark-blue fw-bold"  :class="{'text-danger': parseFloat(node.quantity) <= 1}">{{ node.name }}</p>
+                        <p class="w-100 font-arabic text-uppercase text-stocker-dark-blue fw-bold"  :class="[{'text-danger': parseFloat(node.quantity) == 1},{'text-danger opacity-25': parseFloat(node.quantity) == 0}]">{{ node.name }}</p>
                         <span class="fs-smaller m-0 text-secondary" :class="{'text-danger': parseFloat(node.quantity) <= 1}">{{ node.quantity }}</span>
                         <span class="material-symbols-outlined">navigate_next</span>
                     </aside>

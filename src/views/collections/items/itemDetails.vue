@@ -44,6 +44,12 @@
                 </aside>
             </div>
         </div>
+        
+        <aside class="position-fixed bottom-0 end-0 z-1">
+            <router-link :to="{ name: 'collectionItems', params: { collectionId: $route.params.collectionId } }">
+                <div class="m-4 p-1 bg-secondary d-flex align-items-center rounded"><span class="material-symbols-outlined fs-1 text-light m-0">arrow_back</span></div>
+            </router-link>
+        </aside>
     </section>
     <section v-else class="p-5">
         <h1 class="text-secondary text-center pop">404 Item Not Found</h1>
