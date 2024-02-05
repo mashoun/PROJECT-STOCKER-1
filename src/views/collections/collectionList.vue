@@ -1,24 +1,42 @@
 <template>
     <spinner v-if="spinner">Removing Collection</spinner>
-
     <section class="container">
         <div class="row g-3 justify-content-start">
-            <div v-if="store.stocker.collections.length != 0" class="col-12"><p class="ps-2 border-start border-5 border-warning text-secondary fs-small pop ls-1 fw-bold">All {{store.stocker.collections.length}} / 50 collections</p></div>
-            <div v-else class="col-12"><p class="text-secondary fs-small pop ls-1 text-center py-3">Start by creating new collection</p></div>
-            <div role="button" class="col-12 col-md-10 col-lg-6" v-for="node in store.stocker.collections"
-                :key="node">
+            <div v-if="store.stocker.collections.length != 0" class="col-12">
+                <p class="ps-2 border-start border-5 border-warning text-secondary fs-small pop ls-1 fw-bold">All
+                    {{ store.stocker.collections.length }} / 50 collections</p>
+            </div>
+            <div v-else class="col-12">
+                <p class="text-secondary fs-small pop ls-1 text-center py-3">Start by creating new collection</p>
+            </div>
+            <div class="col-12">
+                <div class="input-group mb-3">
+                    <input v-model="searchInput" type="text" class="form-control" placeholder="Search in collections">
+                    <span class="input-group-text"><span class="material-symbols-outlined">search</span></span>
+
+                </div>
+            </div>
+            <div role="button" class="col-12 col-md-10 col-lg-6" v-for="node in filteredCollections" :key="node">
                 <router-link :to="{ name: 'collectionItems', params: { collectionId: node.record.id } }">
-                    <aside :title="node.record.name" class="p-3 d-flex justify-content-between align-items-center shadow-sm bg-light gap-2">
+                    <aside :title="node.record.name"
+                        class="p-3 d-flex justify-content-between align-items-center shadow-sm bg-light gap-2">
                         <span class="material-symbols-outlined text-stocker-secondary fs-1">folder</span>
-                        <strong class="w-100 text-stocker-dark-blue font-arabic text-uppercase text-fade" role="button">{{ node.record.name }}</strong>
+                        <strong class="w-100 text-stocker-dark-blue font-arabic text-uppercase text-fade" role="button">{{
+                            node.record.name }}</strong>
                         <span class="fs-smaller text-secondary m-0">{{ node.items.length }}</span>
                         <span class="material-symbols-outlined">double_arrow</span>
                     </aside>
                 </router-link>
             </div>
         </div>
+        <div class="row">
+            <div class="col-12">
+                <!-- <div class="" v-for="node in store.collections" :key="node">{{ node.getItems() }}</div> -->
+
+            </div>
+        </div>
     </section>
-    
+
     <aside class="position-fixed bottom-0 end-0 z-1" title="Create new collection">
         <router-link :to="{ name: 'newCollection' }">
             <div class="m-3"><span class="material-symbols-outlined fs-xx-large text-primary">add_box</span></div>
@@ -30,6 +48,7 @@
 import { useStore } from '@/stores/mainStore';
 import spinner from '@/components/spinner.vue';
 import pagination from '@/components/pagination.vue';
+import Item from '@/stores/Item'
 import utilities from '@/utilities';
 export default {
 
@@ -39,7 +58,17 @@ export default {
     },
     data() {
         return {
-            spinner: false
+            spinner: false,
+            searchInput: ''
+        }
+    },
+    computed: {
+        filteredCollections() {
+            if (this.searchInput == '') return this.store.stocker.collections
+
+            return this.store.stocker.collections.filter(coll => {
+                return coll.record.name.toUpperCase().includes(this.searchInput.toUpperCase())
+            });
         }
     },
     components: { spinner, pagination },
@@ -85,6 +114,9 @@ export default {
             this.store.updatedCollectionId = collectionId
             this.$router.push('/updateCollection')
         }
+    },
+    mounted() {
+        // console.log(new Item('pingpong','12','24'));
     }
 }
 </script>

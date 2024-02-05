@@ -1,34 +1,57 @@
+import Item from "./Item"
 export default class Collection {
-    #id = ''
-    #name = ''
-    #thumbnail = ''
+    id = ''
+    name = ''
+    thumbnail = ''
+    items = []
     constructor(name) {
-        this.#name = name
+        this.name = name
         return this
     }
 
     // getters
-    get name() {
-        return this.#name
+    getName() {
+        return this.name
     }
-    get thumbnail() {
-        return this.#thumbnail
+    getThumbnail() {
+        return this.thumbnail
     }
-    get id() {
-        return this.#id
+    getId() {
+        return this.id
     }
 
+    getItems() {
+        return this.items
+    }
+
+    getAsJson() {
+        return {
+            id: this.id,
+            name: this.name,
+            thumbnail: this.thumbnail,
+            items: this.items
+        }
+    }
+
+
     // setters
-    set id(value) {
-        this.#id = value
+    setId(value) {
+        this.id = value
         return this
     }
-    set name(value) {
-        this.#name = value
+    setName(value) {
+        this.name = value
         return this
     }
-    set thumbnail(value) {
-        this.#thumbnail = value
+    setThumbnail(value) {
+        this.thumbnail = value
         return this
+    }
+
+    setItems(items) {
+        // items.forEach(node => {
+        //     this.items.push(new Item(node.name, node.quantity, node.price).setId(node.id))
+        // });
+        this.items = items
     }
 }

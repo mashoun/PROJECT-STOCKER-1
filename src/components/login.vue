@@ -8,12 +8,14 @@
                         <h3 class="font-stocker text-stocker-dark-blue fs-3">stocker</h3>
                         <p class="text-small pop text-secondary"></p>
                         <input v-model="store.username" type="text" placeholder="username" class="form-control mt-3">
-                        <input @keydown.enter="login" v-model="store.password" type="password" placeholder="password" class="form-control">
+                        <input @keydown.enter="login" v-model="store.password" type="password" placeholder="password"
+                            class="form-control">
                         <button v-if="spinner" class="btn btn-sm btn-primary">
                             <div class="spinner-grow spinner-grow-sm"></div>
                         </button>
                         <button v-else class="btn btn-sm btn-primary" @click="login">login</button>
-                        <span class="fs-x-small text-secondary my-3 font-monospace">developed by libancode - version {{ store.version }}</span>
+                        <span class="fs-x-small text-secondary my-3 font-monospace">developed by libancode - version {{
+                            store.version }}</span>
                     </aside>
                 </div>
             </div>
@@ -23,6 +25,7 @@
 <script>
 
 import { useStore } from "@/stores/mainStore";
+import Collection from "@/stores/Collection";
 export default {
 
     setup() {
@@ -51,6 +54,10 @@ export default {
                 this.spinner = false
                 if (res.status == true) {
                     this.store.stocker = res.data
+                    res.data.collections.forEach(node => {
+                        this.store.collections.push(new Collection(node.record.name).setId(node.record.id).setItems(node.items))
+                    });
+                    console.log(this.store.collections);
                     this.store.isLogedIn = true
                 } else alert(res.data)
 

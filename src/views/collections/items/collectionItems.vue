@@ -8,7 +8,7 @@
             <div class="col-12">
                 <div class="input-group mb-3">
                     <input v-model="searchInput" type="text" class="form-control"
-                        placeholder="Search by name, model type/brand/number">
+                        placeholder="Search by Item name, model type/brand/number">
                     <span class="input-group-text"><span class="material-symbols-outlined">search</span></span>
                     <span class="input-group-text rounded-end" type="button" data-bs-toggle="dropdown"><span
                             class="material-symbols-outlined text-dark fw-bold">more_horiz</span></span>
@@ -90,7 +90,7 @@ export default {
             if (this.searchInput == '') return this.selectedCollection.items
 
             return this.selectedCollection.items.filter(item => {
-                return item.name.toUpperCase().includes(this.searchInput.toUpperCase()) || item.modelType.includes(this.searchInput) || item.modelNumber.includes(this.searchInput) || item.modelBrand.includes(this.searchInput)
+                return item.name.toUpperCase().includes(this.searchInput.toUpperCase()) || `${item.modelType}`.includes(this.searchInput) || `${item.modelNumber}`.includes(this.searchInput) || `${item.modelBrand}`.includes(this.searchInput)
             });
         }
 

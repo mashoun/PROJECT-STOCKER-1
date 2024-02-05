@@ -77,11 +77,9 @@ export const useStore = defineStore('store', {
       ]
     },
 
-    selectedCollection: '',
-    selectedItem: '',
-    updatedCollectionId: '',
+    invoices: [],
 
-    invoices: []
+    collections: []
 
 
   }),
